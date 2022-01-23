@@ -1,0 +1,21 @@
+version: '3.1'
+services:
+  api:
+    build: ./api
+    container_name: easygraph_api
+    ports:
+      - 4010:4010
+    volumes:
+      - "./api:/app"
+    working_dir: "/app"
+    command: [ "/bin/sh", "./wait-for-mongo.sh", "--", "npm", "run", "start:dev" ]
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    container_name: easygraph_mongodb
+    command: [ "--bind_ip_all", "--port", "27017" ]
+    ports:
+      - 27017:27017
+
+
