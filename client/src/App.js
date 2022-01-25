@@ -5,6 +5,8 @@ import {
     InMemoryCache,
     gql
 } from '@apollo/client';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 
 const query = `query Match {
     match {
@@ -30,24 +32,63 @@ const getQueriesQuery = gql`query {
     }
 }`;
 
+const getTypeFields = gql`query ($name: String!) {
+    __type(name: $name) {
+      name
+      fields {
+        name
+        type {
+            ofType {
+                name
+                kind
+            }
+        }
+      }
+    }
+}`;
+
 class App extends React.Component {
     state = {
         graphql_url: 'http://localhost:4010/graphql',
         client: undefined,
         queries: [],
-        selectedQuery: undefined
+        selectedQueryIndex: 0
+    }
+
+    fetchTypeFields = async (name) => {
+        const { data } = await this.state.client.query({
+            query: getTypeFields,
+            variables: { name }
+        });
+
+        return Promise.all(data.__type.fields.map(async (field) => {
+            let fields = [];
+            if (field.type.ofType.kind === 'OBJECT') {
+                fields = await this.fetchTypeFields(field.type.ofType.name);
+            }
+
+            return {
+                name: field.name,
+                type: field.type.ofType.name,
+                status: true,
+                fields
+            };
+        }));
     }
 
     fetchQueries = async () => {
         const { data } = await this.state.client.query({
             query: getQueriesQuery
         });
-        const queries = data.__schema.queryType.fields.map(({ name }) => name);
+        const queries = await Promise.all(data.__schema.queryType.fields.map(async ({ name }, index) => {
+            const fields = await this.fetchTypeFields(name);
+            return {
+                name,
+                fields
+            }
+        }));
 
-        this.setState({
-            queries,
-            selectedQuery: queries[0]
-        });
+        this.setState({ queries });
     }
 
     connect = () => {
@@ -67,10 +108,43 @@ class App extends React.Component {
         });
     }
 
-    generate = () => {}
+    changeUrl = (event) => {
+        this.setState({
+            graphql_url: event.target.value
+        });
+    }
+
+    generate = () => {
+
+    }
 
     componentDidMount() {
         this.connect();
+    }
+
+    toggleFieldSelection(path) {
+        const queries = this.state.queries;
+        const { status } = _get(queries, path)
+        _set(queries, `${path}.status`, !status);
+
+        this.setState({ queries });
+    }
+
+    renderField = (parent, field, index) => {
+        const path = `${parent}.fields[${index}]`;
+        return (
+            <li key={path}>
+                <input checked={field.status} type="checkbox" onChange={() => this.toggleFieldSelection(path)} />
+                <span className="field">{field.name}:</span> <span className="type">{field.type}</span>
+                {field.fields?.length > 0 && (
+                    <ul>
+                        {field.fields.map((subField, subIndex) => (
+                            this.renderField(path, subField, subIndex)
+                        ))}
+                    </ul>
+                )}
+            </li>
+        )
     }
 
     render() {
@@ -84,55 +158,25 @@ class App extends React.Component {
                     <div className="App-container">
                         <div className="App-container-item">
                             <div className="App-container-connection">
-                                <input type="text" value={this.state.graphql_url} />
+                                <input type="text" value={this.state.graphql_url} onChange={this.changeUrl} />
                                 <button onClick={this.connect}>Connect</button>
                             </div>
 
                             <div className="App-container-item-border-box">
-                                <select value={this.state.selectedQuery} onChange={this.changeQuery}>
+                                <select
+                                    value={this.state.queries[this.state.selectedQueryIndex] || ''}
+                                    onChange={this.changeQuery}
+                                >
                                     {
-                                        this.state.queries.map(query => (
-                                            <option key={query} value={query}>{query}</option>
+                                        this.state.queries.map((query, index) => (
+                                            <option key={index} value={index}>{query.name}</option>
                                         ))
                                     }
                                 </select>
                                 <ul className="App-container-item-border-box-fields">
-                                    <li>
-                                        <input type="checkbox" />
-                                        <span className="field">id:</span> <span className="type">ID</span>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" />
-                                        <span className="field">user:</span> <span className="type">User</span>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" />
-                                                <span className="field">fullname:</span> <span className="type">String</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" />
-                                                <span className="field">email:</span> <span className="type">String</span>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" />
-                                        <span className="field">position:</span> <span className="type">Position</span>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" />
-                                                <span className="field">name:</span> <span className="type">String</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" />
-                                                <span className="field">status:</span> <span className="type">Boolean</span>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" />
-                                        <span className="field">score:</span> <span className="type">Int</span>
-                                    </li>
+                                    {this.state.queries[this.state.selectedQueryIndex]?.fields.map((field, index) =>
+                                        this.renderField(`[${this.state.selectedQueryIndex}]`, field, index)
+                                    )}
                                 </ul>
                             </div>
                         </div>
