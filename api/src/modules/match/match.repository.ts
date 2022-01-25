@@ -1,10 +1,14 @@
-import { EntityRepository, MongoRepository, ObjectID } from 'typeorm';
+import { Match, MatchDocument } from './match.entity';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { Match } from './match.entity';
+export class MatchRepository {
+    constructor(
+        @InjectModel(Match.name)
+        private readonly matchModel: Model<MatchDocument>,
+    ) {}
 
-@EntityRepository(Match)
-export class MatchRepository extends MongoRepository<Match> {
-    public async findById(id: string | ObjectID): Promise<Match> {
-        return this.findOne(id);
+    public async findById(id: string): Promise<Match> {
+        return this.matchModel.findById(id);
     }
 }

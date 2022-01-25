@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { PositionRepository } from './position.repository';
 import { PositionService } from './position.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Position, PositionSchema } from './position.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([PositionRepository])],
-    providers: [PositionService],
+    imports: [
+        MongooseModule.forFeature([
+            { name: Position.name, schema: PositionSchema },
+        ]),
+    ],
+    providers: [PositionService, PositionRepository],
     exports: [PositionService],
 })
 export class PositionModule {}

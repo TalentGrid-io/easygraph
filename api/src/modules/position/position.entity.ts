@@ -1,13 +1,43 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Document, SchemaTypes, Types } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Entity('positions')
+export type PositionDocument = Position & Document;
+
+@Schema({
+    collection: 'positions',
+    timestamps: false,
+})
+@ObjectType()
 export class Position {
-    @ObjectIdColumn()
-    id: ObjectID;
+    @Prop({ type: SchemaTypes.ObjectId, required: true })
+    _id: Types.ObjectId;
 
-    @Column()
+    @Prop({ type: String, required: true })
     name: string;
 
-    @Column()
+    @Prop({ type: Boolean, required: true })
+    status: boolean;
+}
+
+export const PositionSchema = SchemaFactory.createForClass(Position);
+PositionSchema.method('toClient', function () {
+    const obj = this.toObject();
+
+    obj.id = obj._id;
+    delete obj._id;
+
+    return obj;
+});
+
+@ObjectType()
+export class PositionQuery {
+    @Field(() => ID)
+    id: string;
+
+    @Field()
+    name: string;
+
+    @Field()
     status: boolean;
 }
