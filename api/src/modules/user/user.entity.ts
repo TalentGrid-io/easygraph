@@ -33,7 +33,7 @@ UserSchema.method('toClient', function () {
     return obj;
 });
 
-@ObjectType()
+@ObjectType('user')
 export class UserQuery {
     @Field(() => ID)
     id: string;

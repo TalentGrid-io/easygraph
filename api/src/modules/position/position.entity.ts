@@ -30,7 +30,7 @@ PositionSchema.method('toClient', function () {
     return obj;
 });
 
-@ObjectType()
+@ObjectType('position')
 export class PositionQuery {
     @Field(() => ID)
     id: string;

@@ -2,26 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserQuery {
+type user {
   id: ID!
   name: String!
   surname: String!
   email: String!
 }
 
-type PositionQuery {
+type position {
   id: ID!
   name: String!
   status: Boolean!
 }
 
-type MatchQuery {
+type match {
   id: ID!
-  user: UserQuery!
-  position: PositionQuery!
+  user: user!
+  position: position!
   score: Float!
 }
 
 type Query {
-  match(id: String!): MatchQuery!
+  match(id: String!): match!
 }

@@ -35,7 +35,7 @@ MatchSchema.method('toClient', function () {
     return obj;
 });
 
-@ObjectType()
+@ObjectType('match')
 export class MatchQuery {
     @Field(() => ID)
     id: string;
