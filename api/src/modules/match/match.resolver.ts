@@ -17,7 +17,6 @@ export class MatchResolver {
 
     @Query((returns) => MatchQuery)
     async match(@Args('id') id: string): Promise<Match> {
-        console.log('id', id);
         const match = await this.matchService.getById(id);
         if (!match) {
             throw new NotFoundException(id);
