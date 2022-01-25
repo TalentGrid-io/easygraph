@@ -1,5 +1,9 @@
 import './App.css';
 import React from 'react';
+import {
+    ApolloClient,
+    InMemoryCache
+} from '@apollo/client';
 
 const query = `query Match {
     match {
@@ -17,12 +21,24 @@ const query = `query Match {
 
 class App extends React.Component {
     state = {
-        graphql_url: 'http://localhost:4010/graphql'
+        graphql_url: 'http://localhost:4010/graphql',
+        client: undefined
     }
 
-    connect = () => {}
+    connect = () => {
+        this.setState({
+            client: new ApolloClient({
+                uri: this.state.graphql_url,
+                cache: new InMemoryCache()
+            })
+        });
+    }
 
     generate = () => {}
+
+    componentDidMount() {
+        this.connect();
+    }
 
     render() {
         return (
