@@ -5,6 +5,8 @@ $ npm install
 ```
 
 ## Running the app
+First of all copy sample.env to .env and edit for mongodb connection.
+
 If you dont have any mongo running
 
 ```bash
