@@ -1,0 +1,27 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserQuery {
+  id: ID!
+  name: String!
+  surname: String!
+  email: String!
+}
+
+type PositionQuery {
+  id: ID!
+  name: String!
+  status: Boolean!
+}
+
+type MatchQuery {
+  id: ID!
+  user: UserQuery!
+  position: PositionQuery!
+  score: Float!
+}
+
+type Query {
+  match(id: String!): MatchQuery!
+}

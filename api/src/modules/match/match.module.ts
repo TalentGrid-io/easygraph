@@ -13,7 +13,7 @@ import { Match, MatchSchema } from './match.entity';
         UserModule,
         PositionModule,
     ],
-    providers: [MatchRepository, MatchService],
+    providers: [MatchRepository, MatchService, MatchResolver],
     exports: [MatchService],
 })
 export class MatchModule {}
