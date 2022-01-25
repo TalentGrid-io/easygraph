@@ -82,6 +82,13 @@
   padding: 20px 40px;
 }
 
+.App-container-item-border-box select {
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
 .App-container-item-border-box-fields {
   display: block;
   line-height: 30px;

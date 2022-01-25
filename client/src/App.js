@@ -2,7 +2,8 @@ import './App.css';
 import React from 'react';
 import {
     ApolloClient,
-    InMemoryCache
+    InMemoryCache,
+    gql
 } from '@apollo/client';
 
 const query = `query Match {
@@ -19,10 +20,34 @@ const query = `query Match {
     }
 }`;
 
+const getQueriesQuery = gql`query {
+    __schema {
+        queryType {
+            fields {
+                name
+            }
+        }
+    }
+}`;
+
 class App extends React.Component {
     state = {
         graphql_url: 'http://localhost:4010/graphql',
-        client: undefined
+        client: undefined,
+        queries: [],
+        selectedQuery: undefined
+    }
+
+    fetchQueries = async () => {
+        const { data } = await this.state.client.query({
+            query: getQueriesQuery
+        });
+        const queries = data.__schema.queryType.fields.map(({ name }) => name);
+
+        this.setState({
+            queries,
+            selectedQuery: queries[0]
+        });
     }
 
     connect = () => {
@@ -31,6 +56,14 @@ class App extends React.Component {
                 uri: this.state.graphql_url,
                 cache: new InMemoryCache()
             })
+        }, () => {
+            this.fetchQueries()
+        });
+    }
+
+    changeQuery = (event) => {
+        this.setState({
+            selectedQuery: event.target.value
         });
     }
 
@@ -56,7 +89,13 @@ class App extends React.Component {
                             </div>
 
                             <div className="App-container-item-border-box">
-                                <h1>Match Type</h1>
+                                <select value={this.state.selectedQuery} onChange={this.changeQuery}>
+                                    {
+                                        this.state.queries.map(query => (
+                                            <option key={query} value={query}>{query}</option>
+                                        ))
+                                    }
+                                </select>
                                 <ul className="App-container-item-border-box-fields">
                                     <li>
                                         <input type="checkbox" />
