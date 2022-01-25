@@ -7,25 +7,20 @@ import { ConfigModule } from '@nestjs/config';
 import { MatchModule } from './modules/match/match.module';
 import { PositionModule } from './modules/position/position.module';
 import { UserModule } from './modules/user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
     imports: [
+        UserModule,
+        PositionModule,
+        MatchModule,
         ConfigModule.forRoot(),
         GraphQLModule.forRoot({
             installSubscriptionHandlers: true,
-            debug: false,
-            playground: false,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             include: [MatchModule, PositionModule, UserModule],
         }),
-        TypeOrmModule.forRoot({
-            type: 'mongodb',
-            url: process.env['TYPEORM_URL'],
-            entities: [process.env['TYPEORM_ENTITIES']],
-            useNewUrlParser: true,
-            logging: true,
-        }),
+        MongooseModule.forRoot(process.env['MONGO_DB_URL']),
     ],
     controllers: [],
     providers: [],
