@@ -7,20 +7,7 @@ import {
 } from '@apollo/client';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
-
-const query = `query Match {
-    match {
-        user {
-            fullname,
-            email
-        },
-        position {
-            name,
-            status
-        },
-        score
-    }
-}`;
+import { jsonToGraphQLQuery } from 'json-to-graphql-query';
 
 const getQueriesQuery = gql`query {
     __schema {
@@ -52,7 +39,8 @@ class App extends React.Component {
         graphql_url: 'http://localhost:4010/graphql',
         client: undefined,
         queries: [],
-        selectedQueryIndex: 0
+        selectedQueryIndex: 0,
+        query: ''
     }
 
     fetchTypeFields = async (name) => {
@@ -88,7 +76,9 @@ class App extends React.Component {
             }
         }));
 
-        this.setState({ queries });
+        this.setState({ queries }, () => {
+            this.generate()
+        });
     }
 
     connect = () => {
@@ -104,7 +94,7 @@ class App extends React.Component {
 
     changeQuery = (event) => {
         this.setState({
-            selectedQuery: event.target.value
+            selectedQueryIndex: event.target.value
         });
     }
 
@@ -114,8 +104,28 @@ class App extends React.Component {
         });
     }
 
-    generate = () => {
+    convertQueryToObject = (query) => {
+        const obj = {};
+        for (const field of query.fields) {
+            if (field.fields?.length > 0 && field.status) {
+                obj[field.name] = this.convertQueryToObject(field);
+            } else {
+                obj[field.name] = field.status;
+            }
+        }
+        return obj;
+    }
 
+    generate = () => {
+        const selected = this.state.queries[this.state.selectedQueryIndex];
+        this.setState({
+            query: jsonToGraphQLQuery({
+                query: {
+                    [selected.name]: this.convertQueryToObject(selected)
+                },
+            }, { pretty: true })
+        })
+        
     }
 
     componentDidMount() {
@@ -186,7 +196,7 @@ class App extends React.Component {
                         <div className="App-container-item">
                             <div className="App-container-item-border-box">
                                 <pre className="App-container-item-query">
-                                    {query}
+                                    {this.state.query}
                                 </pre>
                             </div>
                         </div>
