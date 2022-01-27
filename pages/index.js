@@ -26,7 +26,7 @@ export default function Index() {
   const handle = (data) => {
     const {total} = graphCreator(data)
     const parseQuery = JSON.parse(total)
-    setQuery(JSON.stringify(parseQuery, null , 2).replaceAll('"', '').replaceAll(',', '').replaceAll(':', '').replaceAll('doutdes', ''))
+    setQuery(JSON.stringify(parseQuery, null , 2).replaceAll(/([",:]|doutdes)/g, ''))
   }
 
   return (

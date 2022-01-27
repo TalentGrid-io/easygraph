@@ -47,7 +47,7 @@ const graphCreator = (data) => {
         let positionJson = JSON.stringify(position)
         if (Object.keys(match).length > 0) {
             let matchJson = JSON.stringify(match)
-            let newMatchJson = matchJson.replace('{', '').replace('}', '') 
+            let newMatchJson = matchJson.replaceAll(/[{}]/g, '')
             total = `{"match":{${newMatchJson},"user":${userJson}, "position":${positionJson}}}`
         } else {
             total = `{"match":{"user":${userJson}, "position":${positionJson}}}`
@@ -56,7 +56,7 @@ const graphCreator = (data) => {
         let userJson = JSON.stringify(user)
         if (Object.keys(match).length > 0) {
             let matchJson = JSON.stringify(match)
-            let newMatchJson = matchJson.replace('{', '').replace('}', '') 
+            let newMatchJson = matchJson.replaceAll(/[{}]/g, '') 
             total = `{"match":{${newMatchJson},"user":${userJson}}}`
         } else {
             total = `{"match":{"user":${userJson}}}`
@@ -65,7 +65,7 @@ const graphCreator = (data) => {
         let positionJson = JSON.stringify(position)
         if (Object.keys(match).length > 0) {
             let matchJson = JSON.stringify(match)
-            let newMatchJson = matchJson.replace('{', '').replace('}', '') 
+            let newMatchJson = matchJson.replaceAll(/[{}]/g, '')
             total = `{"match":{${newMatchJson}, "position":${positionJson}}}`
         } else {
             total = `{"match":{"position":${positionJson}}}`
@@ -73,7 +73,7 @@ const graphCreator = (data) => {
     } else {
         if (Object.keys(match).length > 0) {
             let matchJson = JSON.stringify(match)
-            let newMatchJson = matchJson.replace('{', '').replace('}', '') 
+            let newMatchJson = matchJson.replaceAll(/[{}]/g, '') 
             total = `{"match":{${newMatchJson}}}`
         } else {
             total = `{"match":{}}`
