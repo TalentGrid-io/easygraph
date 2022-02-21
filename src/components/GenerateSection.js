@@ -17,8 +17,8 @@ const GenerateSection = ({ selectedTypeData, queriesData, setQueryCode }) => {
   }
 
   return (
-    <section style={{ display: 'flex' }}>
-      <button onClick={handleGenerateClick} style={{ alignSelf: 'end' }}>
+    <section className="is-flex is-justify-content-center mb-4">
+      <button className="button is-info" onClick={handleGenerateClick}>
         Generate
       </button>
     </section>

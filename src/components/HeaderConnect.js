@@ -35,24 +35,27 @@ const HeaderConnect = ({ queriesData, setQueriesData, setSelectedTypeData }) => 
     })
 
   return (
-    <header style={{ textAlign: 'center' }}>
-      <h1>EasyGraph</h1>
-      <h3>Generate easy graphql queries</h3>
-      <div style={{ marginBottom: 8 }}>
+    <header className="has-text-centered mt-4">
+      <h1 className="title is-1">EasyGraph</h1>
+      <h3 className="title is-3">Generate easy graphql queries</h3>
+      <div className="mb-2">
         <div>
           <input
+            className="input mr-2"
             name="serverInput"
             type="text"
             placeholder="Enter your graphQL server here"
             value={form.serverInput}
             onChange={handleServerInputChange}
-            style={{ marginRight: 8, width: 250 }}
+            style={{ width: 300 }}
           />
-          <button onClick={handleConnectClick}>connect</button>
+          <button className="button is-info" onClick={handleConnectClick}>
+            connect
+          </button>
         </div>
       </div>
       {queriesData && (
-        <div>
+        <div className="select">
           <select defaultValue="" onChange={handleQuerySelectChange}>
             {queriesData.__schema.queryType.fields.map(field => (
               <option key={field.name} value={field.type.name}>

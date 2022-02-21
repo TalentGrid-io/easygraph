@@ -20,16 +20,20 @@ const TypeCheckboxList = ({
   return (
     <div>
       {fields.map(({ name, type, fields, status }, index) => (
-        <div style={{ marginLeft: depth * 48, marginTop: 2 }} key={`${parentIndex}-${index}`}>
-          <input
-            checked={status}
-            value={status}
-            name={`${parentIndex}${index}`}
-            type="checkbox"
-            onChange={handleTypeCheckboxChange}
-          />
-          <span>{name}: </span>
-          <span>{type?.name ? type.name : type?.ofType?.name}</span>
+        <div style={{ marginLeft: depth * 48 }} key={`${parentIndex}-${index}`}>
+          <label className="checkbox">
+            <input
+              className="mr-2"
+              checked={status}
+              value={status}
+              name={`${parentIndex}${index}`}
+              type="checkbox"
+              onChange={handleTypeCheckboxChange}
+            />
+            <span style={{ color: '#1F61A0' }}>{name}: </span>
+            <span style={{ color: '#b4a617' }}>{type?.name ? type.name : type?.ofType?.name}</span>
+          </label>
+
           <TypeCheckboxList
             setSelectedTypeData={setSelectedTypeData}
             selectedTypeData={selectedTypeData}
