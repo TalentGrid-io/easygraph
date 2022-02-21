@@ -1,91 +1,70 @@
-# EasyGraph
+# Getting Started with Create React App
 
-EasyGraph uygulaması hızlı graphql queryleri oluşturup çıktılarını alabildiğimiz basit bir tool olarak adlandırabiliriz.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-- Query görüntüleme
-- Mutation görüntüleme
-- Query veya mutation altında olabilen type'ları görüntüleme ve seçme
+## Available Scripts
 
-işlemlerini yapmaktadır.
+In the project directory, you can run:
 
-## Gereksinimler
+### `npm start`
 
-- React kütüphanesi kullanılarak geliştirilmiş ui uygulaması
-- Graphql ile tasarlanmış Node.js API uygulaması
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
----
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-## API
+### `npm test`
 
-### Database schema
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-```js
-User: {
-    id: ID,
-    name: String,
-    surname: String,
-    email: String,
-}
+### `npm run build`
 
-Position: {
-    id: ID,
-    name: String,
-    status: Boolean,
-}
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Match: {
-    id: ID,
-    user: ID,
-    position: ID,
-    score: Int
-}
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-```
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-> Yukarıda verilen database şemasına göre aşağıdaki graphql cevabının gelmesi beklenir.
+### `npm run eject`
 
-### Graphql response
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-```json
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-"match": {
-    "score": 100,
-    "position": {
-        "name": "Good position",
-        "status": true,
-    },
-    "user": {
-        "fullname": "Aaron Swartz"
-        "email": "aaronswartz@gmail.com"
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-    }
-}
-```
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
----
+## Learn More
 
-## Frontend
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-### React application
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-![Signup A (1)](https://user-images.githubusercontent.com/6208736/150119166-1eb141ea-94af-460e-a05c-5ce1195d3f50.png)
+### Code Splitting
 
-EasyGraph uygulamasında query ve mutation'ların görüntülendiği alan vardır. (bu durum için mutation gerekmez.)
-Görüntülenen her query ve altındaki field için birer checkbox bulunur. Eğer ana type altındaki herhangi bir type'ın subfield'ları var ise o fieldlar da seçilebilir.
-Generate butonuna tıklandığı durumda sağ tarafta text olarak easyGraph hazır! volia 🎉
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-## Kaynaklar
+### Analyzing the Bundle Size
 
-- https://medium.com/@mrthankyou/how-to-get-a-graphql-schema-28915025de0e
-- https://graphql.org/learn/introspection/
-- https://github.com/codemirror/CodeMirror
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-## Açıklamalar
+### Making a Progressive Web App
 
-- Hızlı ve daha rahat development ortamı için
-  - Json database kullanılabilir.
-  - create-react-app ile React uygulaması kurulabilir.
-- Repo içerisinde develop branch'i vardır. Bu repoyu forklayarak üzerinde geliştirmelerini yapabilirsin. Hazır olduğu durumda bu repoya pull request açabilirisin. Herhangi bir durum olduğunda liva@talentgrid.io hesabına mail atabilirsin.
-- Eğer açılan pull request master branch'ine merge edilmişse Tebrikler 🚀 birlikte talentgrid ekosistemini geliştirmeye başladık demektir. Eğer istersen bu easyGraph uygulamasını açık kaynak olarak tüm dünyaya sunabiliriz.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-Başarılar 🤜
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
