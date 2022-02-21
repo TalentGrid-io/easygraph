@@ -5,6 +5,7 @@ const getCheckedFieldsDeeplyHelper = fields =>
     }
     if (field.fields.length) {
       acc[field.name] = getCheckedFieldsDeeplyHelper(field.fields)
+      Object.keys(acc[field.name]).length === 0 && delete acc[field.name]
     }
     return acc
   }, {})
