@@ -1,5 +1,6 @@
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
 import { getCheckedFieldsDeeplyHelper } from '../helper'
+import { toastSuccess } from '../util/toastifyUtil'
 
 const GenerateSection = ({ selectedTypeData, queriesData, setQueryCode }) => {
   const handleGenerateClick = () => {
@@ -13,7 +14,7 @@ const GenerateSection = ({ selectedTypeData, queriesData, setQueryCode }) => {
       { pretty: true }
     )
     setQueryCode(code)
-    console.log(code)
+    toastSuccess('Schema successfully generated')
   }
 
   return (
