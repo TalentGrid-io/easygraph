@@ -2,6 +2,7 @@ import { HttpLink, useApolloClient, useQuery } from '@apollo/client'
 import { easyGraphQueries } from '../queries'
 import { useState } from 'react'
 import { fetchTypeDeeplyHelper } from '../helper'
+import { toastError, toastSuccess } from '../util/toastifyUtil'
 
 const HeaderConnect = ({ queriesData, setQueriesData, setSelectedTypeData }) => {
   const client = useApolloClient()
@@ -17,16 +18,26 @@ const HeaderConnect = ({ queriesData, setQueriesData, setSelectedTypeData }) => 
   })
 
   const handleConnectClick = async e => {
-    client.setLink(new HttpLink({ uri: form.serverInput }))
-    const { data } = await refetchQueries()
-    setQueriesData(data)
+    try {
+      client.setLink(new HttpLink({ uri: form.serverInput }))
+      const { data } = await refetchQueries()
+      setQueriesData(data)
+      toastSuccess('Connected to server')
+    } catch (error) {
+      toastError('Error connecting to server')
+    }
   }
 
   const handleQuerySelectChange = async e => {
     const { value } = e.target
     const { data } = await refetchType({ name: value })
-    const fields = await fetchTypeDeeplyHelper(refetchType)(value)
-    setSelectedTypeData({ ...data.__type, fields })
+    try {
+      const fields = await fetchTypeDeeplyHelper(refetchType)(value)
+      setSelectedTypeData({ ...data.__type, fields })
+      toastSuccess(`${value} query type selected`)
+    } catch (error) {
+      toastError('This query is not supported yet')
+    }
   }
 
   const handleServerInputChange = e =>
@@ -57,6 +68,7 @@ const HeaderConnect = ({ queriesData, setQueriesData, setSelectedTypeData }) => 
       {queriesData && (
         <div className="select">
           <select defaultValue="" onChange={handleQuerySelectChange}>
+            <option value="">--Please choose an option--</option>
             {queriesData.__schema.queryType.fields.map(field => (
               <option key={field.name} value={field.type.name}>
                 {field.name}

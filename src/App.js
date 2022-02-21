@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 //components
 import { FallbackLoading } from './components'
 //pages
@@ -8,6 +9,7 @@ const App = () => {
   return (
     <Suspense fallback={<FallbackLoading />}>
       <EasyGraphPage />
+      <ToastContainer />
     </Suspense>
   )
 }
