@@ -19,11 +19,13 @@ const EasyGraphPage = () => {
     <div>
       <HeaderConnect {...states} />
       {selectedTypeData && (
-        <section style={{ display: 'flex', padding: 20, flexWrap: 'wrap' }}>
-          <TypeSection {...states} />
+        <>
+          <section style={{ height: 'calc(100vh - 300px)' }} className="is-flex p-5 is-flex-wrap-wrap is-4">
+            <TypeSection {...states} />
+            <QuerySection {...states} />
+          </section>
           <GenerateSection {...states} />
-          <QuerySection {...states} />
-        </section>
+        </>
       )}
     </div>
   )
